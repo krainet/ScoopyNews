@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="7549" systemVersion="14D136" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="Authors" representedClassName="RADAuthors" syncable="YES">
+        <attribute name="author_email" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="author_name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="isAppAuthor" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <relationship name="news" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="News" inverseName="author" inverseEntity="News" syncable="YES"/>
+    </entity>
+    <entity name="Image" representedClassName="RADImages" syncable="YES">
+        <attribute name="imageData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
+        <attribute name="imageUrl" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="news" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="News" inverseName="image" inverseEntity="News" syncable="YES"/>
+        <relationship name="valoration" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Valoration" inverseName="image" inverseEntity="Valoration" syncable="YES"/>
+    </entity>
+    <entity name="News" representedClassName="RADNews" syncable="YES">
+        <attribute name="dateAdd" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="datePublish" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="idCloud" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="published" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="rating" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="topublish" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <relationship name="author" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Authors" inverseName="news" inverseEntity="Authors" syncable="YES"/>
+        <relationship name="image" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Image" inverseName="news" inverseEntity="Image" syncable="YES"/>
+        <relationship name="valoration" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Valoration" inverseName="news" inverseEntity="Valoration" syncable="YES"/>
+    </entity>
+    <entity name="Valoration" representedClassName="RADValoration" syncable="YES">
+        <attribute name="ratingPoints" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="image" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Image" inverseName="valoration" inverseEntity="Image" syncable="YES"/>
+        <relationship name="news" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="News" inverseName="valoration" inverseEntity="News" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Authors" positionX="-54" positionY="9" width="128" height="105"/>
+        <element name="Image" positionX="-18" positionY="72" width="128" height="120"/>
+        <element name="News" positionX="-63" positionY="-18" width="128" height="210"/>
+        <element name="Valoration" positionX="-27" positionY="63" width="128" height="105"/>
+    </elements>
+</model>
