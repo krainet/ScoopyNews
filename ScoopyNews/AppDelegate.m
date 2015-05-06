@@ -33,6 +33,7 @@
     self.stack = [AGTCoreDataStack coreDataStackWithModelName:@"Model"];
     
     //[self createDummyData];
+    //[self.stack zapAllData];
 
     
     RADHomeViewController *hVC = [[RADHomeViewController alloc]init];
@@ -43,6 +44,10 @@
     
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
+    
+    // Alta en notificaciones de teclado
+    [self setupSaveNotification];
+
     
     //[self autoSave];
     return YES;
@@ -158,6 +163,37 @@
 }
 
 
+#pragma mark - Notifications
+-(void) setupSaveNotification{
+    // Alta en notificaciones
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    
+    [nc addObserver:self
+           selector:@selector(notifyThatModelHasChanged:)
+               name:MODEL_HAS_CHANGES
+             object:nil];
+    
+}
+
+-(void)notifyThatModelHasChanged:(NSNotification*)n{
+    [self.stack saveWithErrorBlock:^(NSError *error) {
+        if(error){
+            //NSLog(@"Error %@",error);
+        }else{
+            //NSLog(@"Salvamos OK");
+        }
+    }];
+}
+
+-(void) tearDownNotifications{
+    
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    
+    [nc removeObserver:self];
+    
+}
+
+
 
 #pragma mark -Unused
 - (void)applicationWillResignActive:(UIApplication *)application {
@@ -180,6 +216,7 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    [self tearDownNotifications];
 }
 
 

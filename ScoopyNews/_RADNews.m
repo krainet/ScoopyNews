@@ -17,6 +17,7 @@ const struct RADNewsAttributes RADNewsAttributes = {
 const struct RADNewsRelationships RADNewsRelationships = {
 	.author = @"author",
 	.image = @"image",
+	.location = @"location",
 	.valoration = @"valoration",
 };
 
@@ -138,6 +139,8 @@ const struct RADNewsRelationships RADNewsRelationships = {
 @dynamic author;
 
 @dynamic image;
+
+@dynamic location;
 
 @dynamic valoration;
 

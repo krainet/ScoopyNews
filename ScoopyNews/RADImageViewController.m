@@ -197,7 +197,6 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info{
         [output appendFormat:@"%02x", digest[i]];
     
     return  output;
-    
 }
 
 @end

@@ -1,16 +1,25 @@
 #import "RADNews.h"
 #import "RADAuthors.h"
 #import "RADImages.h"
+#import "RADLocation.h"
+
 
 @import UIKit;
+@import CoreLocation;
 
-@interface RADNews ()
+@interface RADNews ()<CLLocationManagerDelegate>
 
-// Private interface goes here.
+@property (strong,nonatomic) CLLocationManager *locationManager;
 
 @end
 
 @implementation RADNews
+
+@synthesize locationManager=_locationManager;
+
+-(BOOL) hasLocation{
+    return (nil!=self.location);
+}
 
 #pragma mark -  Factory Inits
 +(NSArray *) observableKeys{
@@ -37,6 +46,41 @@
     n.datePublish=[NSDate date];
     
     return n;
+}
+
+#pragma mark - Localization
+-(void)awakeFromInsert{
+    [super awakeFromInsert];
+    [self.locationManager requestWhenInUseAuthorization];
+    CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
+    
+    if(((status==kCLAuthorizationStatusAuthorizedWhenInUse) || (status==kCLAuthorizationStatusAuthorizedAlways) || (status==kCLAuthorizationStatusNotDetermined)) && [CLLocationManager locationServicesEnabled]){
+        
+        NSLog(@"Tenemos acceso a localización");
+        
+        self.locationManager = [[CLLocationManager alloc]init];
+        self.locationManager.delegate=self;
+        // Check for iOS 8. Without this guard the code will crash with "unknown selector" on iOS 7.
+        if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+            [self.locationManager requestWhenInUseAuthorization];
+        }
+        
+        self.locationManager.desiredAccuracy=kCLLocationAccuracyBest;
+        [self.locationManager startUpdatingLocation];
+    }else{
+        NSLog(@"No hay acceso a localización");
+    }
+    
+}
+
+#pragma mark - Location delegate
+-(void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
+    [self.locationManager stopUpdatingLocation];
+    self.locationManager=nil;
+    
+    CLLocation *loc = [locations lastObject];
+    
+    self.location=[RADLocation locationWithLatitude:loc forNews:self];
 }
 
 #pragma mark - KVO

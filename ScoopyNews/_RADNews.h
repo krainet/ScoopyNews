@@ -18,11 +18,13 @@ extern const struct RADNewsAttributes {
 extern const struct RADNewsRelationships {
 	__unsafe_unretained NSString *author;
 	__unsafe_unretained NSString *image;
+	__unsafe_unretained NSString *location;
 	__unsafe_unretained NSString *valoration;
 } RADNewsRelationships;
 
 @class RADAuthors;
 @class RADImages;
+@class RADLocation;
 @class RADValoration;
 
 @interface RADNewsID : NSManagedObjectID {}
@@ -86,6 +88,10 @@ extern const struct RADNewsRelationships {
 
 //- (BOOL)validateImage:(id*)value_ error:(NSError**)error_;
 
+@property (nonatomic, strong) RADLocation *location;
+
+//- (BOOL)validateLocation:(id*)value_ error:(NSError**)error_;
+
 @property (nonatomic, strong) NSSet *valoration;
 
 - (NSMutableSet*)valorationSet;
@@ -140,6 +146,9 @@ extern const struct RADNewsRelationships {
 
 - (RADImages*)primitiveImage;
 - (void)setPrimitiveImage:(RADImages*)value;
+
+- (RADLocation*)primitiveLocation;
+- (void)setPrimitiveLocation:(RADLocation*)value;
 
 - (NSMutableSet*)primitiveValoration;
 - (void)setPrimitiveValoration:(NSMutableSet*)value;

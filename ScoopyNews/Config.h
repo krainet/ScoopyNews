@@ -22,3 +22,5 @@
 
 #define AUTO_SAVE 1
 #define AUTO_SAVE_DELAY 20
+
+#define MODEL_HAS_CHANGES @"modelHasChanges"

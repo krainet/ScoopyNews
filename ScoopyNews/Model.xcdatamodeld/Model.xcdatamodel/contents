@@ -13,6 +13,11 @@
         <relationship name="news" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="News" inverseName="image" inverseEntity="News" syncable="YES"/>
         <relationship name="valoration" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Valoration" inverseName="image" inverseEntity="Valoration" syncable="YES"/>
     </entity>
+    <entity name="Location" representedClassName="RADLocation" syncable="YES">
+        <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="longitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <relationship name="news" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="News" inverseName="location" inverseEntity="News" syncable="YES"/>
+    </entity>
     <entity name="News" representedClassName="RADNews" syncable="YES">
         <attribute name="dateAdd" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="datePublish" optional="YES" attributeType="Date" syncable="YES"/>
@@ -24,6 +29,7 @@
         <attribute name="topublish" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <relationship name="author" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Authors" inverseName="news" inverseEntity="Authors" syncable="YES"/>
         <relationship name="image" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Image" inverseName="news" inverseEntity="Image" syncable="YES"/>
+        <relationship name="location" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Location" inverseName="news" inverseEntity="Location" syncable="YES"/>
         <relationship name="valoration" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Valoration" inverseName="news" inverseEntity="Valoration" syncable="YES"/>
     </entity>
     <entity name="Valoration" representedClassName="RADValoration" syncable="YES">
@@ -35,7 +41,8 @@
     <elements>
         <element name="Authors" positionX="-54" positionY="9" width="128" height="105"/>
         <element name="Image" positionX="-18" positionY="72" width="128" height="120"/>
-        <element name="News" positionX="-63" positionY="-18" width="128" height="210"/>
+        <element name="Location" positionX="-36" positionY="72" width="128" height="90"/>
+        <element name="News" positionX="-63" positionY="-18" width="128" height="225"/>
         <element name="Valoration" positionX="-27" positionY="63" width="128" height="105"/>
     </elements>
 </model>

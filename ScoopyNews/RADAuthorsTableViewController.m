@@ -12,6 +12,7 @@
 #import "RADImages.h"
 #import "RADAddNewsViewController.h"
 #import "RADAuthors.h"
+#import "Config.h"
 
 @interface RADAuthorsTableViewController ()
 @property (strong,nonatomic) RADNews *news;
@@ -23,7 +24,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self addNewsButton];
-    
     // Edit button
     //self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
@@ -89,6 +89,19 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
 -(void) addNewNews:(id) sender{
     RADAuthors *author = [RADAuthors authorWithName:@"Ramon Alberti" InContext:self.fetchedResultsController.managedObjectContext];
     [RADNews newsWithTitle:@"Nueva noticia" Text:@"" Author:author InContext:self.fetchedResultsController.managedObjectContext];
+//    NSNotification *notification =
+//    [NSNotification notificationWithName: MODEL_HAS_CHANGES
+//                                  object:self
+//                                userInfo:@{@"context" : self.fetchedResultsController.managedObjectContext}];
+//    
+//    [[NSNotificationCenter defaultCenter] postNotification:notification];
+    NSError *err;
+    [self.fetchedResultsController.managedObjectContext save:&err];
+    if(err){
+        NSLog(@"Error saving... %@",err);
+    }else{
+        NSLog(@"Saved OK");
+    }
 }
 
 
@@ -107,7 +120,13 @@ forRowAtIndexPath:(NSIndexPath *)indexPath{
         
         // Eliminarla
         [self.fetchedResultsController.managedObjectContext deleteObject:nb];
-        
+        NSError *err;
+        [self.fetchedResultsController.managedObjectContext save:&err];
+        if(err){
+            NSLog(@"Error deleting ...%@",err);
+        }else{
+            NSLog(@"Deleted OK");
+        }
     }
     
 }
@@ -118,7 +137,6 @@ forRowAtIndexPath:(NSIndexPath *)indexPath{
 #pragma mark - Unused
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    
 }
 
 @end

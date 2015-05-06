@@ -10,6 +10,8 @@
 #import "RADImageViewController.h"
 #import "RADNews.h"
 #import "RADImages.h"
+#import "RADLocation.h"
+
 
 #import <WindowsAzureMobileServices/WindowsAzureMobileServices.h>
 
@@ -22,14 +24,12 @@
 @property (strong,nonatomic) NSManagedObjectContext *context;
 @property (strong,nonatomic) MSClient *client;
 @property (strong,nonatomic) MSTable *table;
-
-
 @end
 
 @implementation RADAddNewsViewController
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
+    [super viewDidLoad];    
 }
 
 #pragma mark - Init
@@ -88,14 +88,6 @@
 -(IBAction)saveNews:(id)sender{
     self.model.title=self.newsTitle.text;
     self.model.text=self.newsText.text;
-    
-    NSError *error;
-    [self.context save:&error];
-    if(error){
-        NSLog(@"Error salvando ... %@",error);
-    }else{
-        NSLog(@"save OK %@",error);
-    }
 }
 
 #pragma mark - Utils
@@ -103,7 +95,11 @@
     self.newsTitle.text=self.model.title;
     self.newsText.text=self.model.text;
     self.newsImage.image=self.model.image.image;
+    self.locLatitude.text=[self.model.location.latitude stringValue];
+    self.locLongitude.text=[self.model.location.longitude stringValue];
 }
+
+
 
 
 @end

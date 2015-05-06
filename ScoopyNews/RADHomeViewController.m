@@ -65,44 +65,6 @@
 
 - (IBAction)testAction:(id)sender {
     
-    
-    // Buscar
-    NSFetchRequest *req = [NSFetchRequest
-                           fetchRequestWithEntityName:[RADNews entityName]];
-    
-    req.sortDescriptors = @[[NSSortDescriptor
-                             sortDescriptorWithKey:RADNewsAttributes.title
-                             ascending:YES
-                             selector:@selector(caseInsensitiveCompare:)]];
-    
-    
-    req.fetchBatchSize = 20;
-    
-    //req.predicate = [NSPredicate predicateWithFormat:@"author = %@", author1];
-    req.predicate=nil;
-    
-    NSArray *results = [self.stack
-                        executeFetchRequest:req
-                        errorBlock:^(NSError *error) {
-                            NSLog(@"error al buscar! %@", error);
-                        }];
-    
-    NSLog(@"Total News: %lu", (unsigned long)results.count);
-    for (RADNews *n in results) {
-        NSLog(@"N Tittle: %@",n.title);
-    }
-    // Borrar
-    //[self.stack.context deleteObject:noticia2];
-    
-    // Guardar
-    [self.stack saveWithErrorBlock:^(NSError *error) {
-        if(error){
-            NSLog(@"¡Error al guardar! %@", error);
-        }else {
-            NSLog(@"Guardamos");
-        }
-    }];
-    
 }
 
 

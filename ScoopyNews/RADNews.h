@@ -4,6 +4,8 @@
 
 @interface RADNews : _RADNews {}
 
+@property (nonatomic,readonly) BOOL hasLocation;
+
 +(instancetype) newsWithTitle:(NSString *) title
                          Text:(NSString*) text
                        Author:(RADAuthors *) author
