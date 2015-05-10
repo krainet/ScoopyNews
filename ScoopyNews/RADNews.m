@@ -47,7 +47,7 @@
     n.rating=[NSNumber numberWithInt:0];
     n.image=[RADImages insertInManagedObjectContext:context];
     n.image.image=[UIImage imageNamed:@"noimage.jpg"];
-    n.published=[NSNumber numberWithBool:YES];
+    n.published=[NSNumber numberWithBool:NO];
     n.topublish=[NSNumber numberWithBool:NO];
     n.dateAdd=[NSDate date];
     n.datePublish=[NSDate date];

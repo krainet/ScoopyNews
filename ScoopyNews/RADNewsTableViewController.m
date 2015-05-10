@@ -42,6 +42,31 @@
     }
     // Sincornizar nota -> celda
     cell.textLabel.text = n.title;
+    
+    
+    // Crear una cola
+    dispatch_queue_t asyncimage = dispatch_queue_create("asyncimage", 0);
+    
+    //Poner el prefijo
+    __block UIImage *image =nil;
+    __block NSData *imgData=nil;
+    
+    //Enviar un bloque a background
+    dispatch_async(asyncimage, ^{
+        NSURL *url = [NSURL URLWithString:n.imageURL];
+        
+        imgData = [NSData dataWithContentsOfURL:url];
+        
+        //Esto vuelve a primer plano y se ejecuta
+        dispatch_async(dispatch_get_main_queue(), ^{
+            image = [UIImage imageWithData:imgData];
+            cell.imageView.image=image;
+            
+        });
+    });
+    
+    
+    
     cell.imageView.image=[UIImage imageNamed:@"noimage.jpg"];
     cell.detailTextLabel.text = n.author;
     
@@ -55,7 +80,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     
     // Averiguar la nota
-    RADNews *n = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    RNews *n = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
     // Crear el controlador
     RADNewViewController *nVC = [[RADNewViewController alloc] initWithModel:n AndContext:self.fetchedResultsController.managedObjectContext];

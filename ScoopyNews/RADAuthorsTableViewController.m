@@ -102,6 +102,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
                                 Author:author
                              InContext:self.fetchedResultsController.managedObjectContext];
     
+    NSLog(@"Nueva noticia creada: %@",n.title);
         
 }
 

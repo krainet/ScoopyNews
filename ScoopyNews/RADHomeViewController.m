@@ -90,13 +90,11 @@
 }
 
 - (IBAction)publishNewsAction:(id)sender {
-    if(self.client.currentUser.userId){
+    if([self AuthUser]==YES){
         //Logado
         RADAuthorsTableViewController *nAuthorsVC = [[RADAuthorsTableViewController alloc] initWithFetchedResultsController:[self getDataForAuthor] style:UITableViewStylePlain];
         [self.navigationController pushViewController:nAuthorsVC animated:YES];
-        
     }else{
-        //No logado
         [self facebookLoginWithController:self];
     }
 }
@@ -123,17 +121,6 @@
                                       managedObjectContext:self.rstack.context
                                       sectionNameKeyPath:nil
                                       cacheName:nil];
-    NSArray *results = [self.rstack
-                        executeFetchRequest:req
-                        errorBlock:^(NSError *error) {
-                            NSLog(@"error al buscar! %@", error);
-                        }];
-    NSLog(@"Results %@",results);
-    
-    NSLog(@"Total News: %lu", (unsigned long)results.count);
-    for (RNews *n in results) {
-        NSLog(@"N Tittle: %@",n.title);
-    }
 
     return fc;
     
@@ -194,6 +181,24 @@
         }
     }];
 }
+
+#pragma mark - Auth
+-(BOOL) AuthUser{
+    NSString *userFBId = [RADUserDefaults getValueForKey:LOCAL_FACEBOOK_USERID];
+    if (userFBId) {
+        NSString *FBToken = [RADUserDefaults getValueForKey:LOCAL_FACEBOOK_TOKEN];
+        
+        self.client.currentUser = [[MSUser alloc]initWithUserId:userFBId];
+        self.client.currentUser.mobileServiceAuthenticationToken = FBToken;
+        return YES;
+    }else{
+        //Go back user
+        [RADUserDefaults alertWithTitle:@"Not logged" AndMessage:@"You must be logged to stay here"];
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }
+    return NO;
+}
+
 
 
 #pragma mark - Unused

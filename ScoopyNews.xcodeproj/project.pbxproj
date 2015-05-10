@@ -14,6 +14,8 @@
 		1E8559031AFFAE9200C88443 /* RemoteModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1E8559011AFFAE9200C88443 /* RemoteModel.xcdatamodeld */; };
 		1E8559061AFFAF8800C88443 /* _RNews.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8559051AFFAF8800C88443 /* _RNews.m */; };
 		1E8559091AFFAFA800C88443 /* RNews.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8559081AFFAFA800C88443 /* RNews.m */; };
+		1E85590C1AFFD80200C88443 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E85590A1AFFD80200C88443 /* icon.png */; };
+		1E85590D1AFFD80200C88443 /* iconSmall.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E85590B1AFFD80200C88443 /* iconSmall.png */; };
 		1E99D8F61AF14FED00747CEB /* RADAzureUsers.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E99D8F51AF14FED00747CEB /* RADAzureUsers.m */; };
 		1E99D8F91AF15BEA00747CEB /* RADUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E99D8F81AF15BEA00747CEB /* RADUserDefaults.m */; };
 		1EAEE93C1AEFF84A0053323D /* WindowsAzureMobileServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EAEE93B1AEFF84A0053323D /* WindowsAzureMobileServices.framework */; };
@@ -74,6 +76,8 @@
 		1E8559051AFFAF8800C88443 /* _RNews.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _RNews.m; sourceTree = "<group>"; };
 		1E8559071AFFAFA800C88443 /* RNews.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNews.h; sourceTree = "<group>"; };
 		1E8559081AFFAFA800C88443 /* RNews.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNews.m; sourceTree = "<group>"; };
+		1E85590A1AFFD80200C88443 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
+		1E85590B1AFFD80200C88443 /* iconSmall.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iconSmall.png; sourceTree = "<group>"; };
 		1E99D8F41AF14FED00747CEB /* RADAzureUsers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RADAzureUsers.h; sourceTree = "<group>"; };
 		1E99D8F51AF14FED00747CEB /* RADAzureUsers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RADAzureUsers.m; sourceTree = "<group>"; };
 		1E99D8F71AF15BEA00747CEB /* RADUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RADUserDefaults.h; sourceTree = "<group>"; };
@@ -193,6 +197,8 @@
 		1EBA5AB71AF2824800E96EEE /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				1E85590A1AFFD80200C88443 /* icon.png */,
+				1E85590B1AFFD80200C88443 /* iconSmall.png */,
 				1EFF6C011AF4C8D300F6919A /* gps.png */,
 				1E488E001AF2A175006A2F41 /* noimage.jpg */,
 				1EBA5AB51AF2824000E96EEE /* homelogo.jpg */,
@@ -438,9 +444,11 @@
 				1E488E011AF2A175006A2F41 /* noimage.jpg in Resources */,
 				1EFE3E911AEEADD90091CA0E /* Podfile in Resources */,
 				1EBA5AB41AF281C400E96EEE /* RADHomeViewController.xib in Resources */,
+				1E85590C1AFFD80200C88443 /* icon.png in Resources */,
 				1EEA1BED1AF506AE0040CF72 /* RADImageViewController.xib in Resources */,
 				1EBA5AB61AF2824000E96EEE /* homelogo.jpg in Resources */,
 				1EFE3E601AEEA3690091CA0E /* Images.xcassets in Resources */,
+				1E85590D1AFFD80200C88443 /* iconSmall.png in Resources */,
 				1EBA5A901AF268EB00E96EEE /* RADNewViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

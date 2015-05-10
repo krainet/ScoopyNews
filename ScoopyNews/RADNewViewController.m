@@ -7,7 +7,7 @@
 //
 
 #import "RADNewViewController.h"
-#import "RADNews.h"
+#import "RNews.h"
 #import "RADUserDefaults.h"
 #import "RADImages.h"
 #import "RADAuthors.h"
@@ -18,7 +18,7 @@
 
 @interface RADNewViewController ()
 
-@property (strong,nonatomic) RADNews *model;
+@property (strong,nonatomic) RNews *model;
 @property (strong,nonatomic) MSClient *client;
 @property (strong,nonatomic) NSManagedObjectContext *context;
 
@@ -29,7 +29,7 @@
 @implementation RADNewViewController
 
 
--(id) initWithModel:(RADNews*) model AndContext:(NSManagedObjectContext *)context{
+-(id) initWithModel:(RNews*) model AndContext:(NSManagedObjectContext *)context{
     if(self=[super init]){
         _model=model;
         _context=context;
@@ -46,12 +46,7 @@
 
 -(void) viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    if([self AuthUser]==YES){
-        [self getUserInfo];
-        self.newsTitle.text=self.model.title;
-        self.newsText.text=self.model.text;
-        self.newsImage.image=self.model.image.image;
-    }
+    [self syncViewWithModel];
 }
 
 #pragma mark - Utils
@@ -70,22 +65,7 @@
                 }];
 }
 
-#pragma mark - Auth
--(BOOL) AuthUser{
-    NSString *userFBId = [RADUserDefaults getValueForKey:LOCAL_FACEBOOK_USERID];
-    if (userFBId) {
-        NSString *FBToken = [RADUserDefaults getValueForKey:LOCAL_FACEBOOK_TOKEN];
-        
-        self.client.currentUser = [[MSUser alloc]initWithUserId:userFBId];
-        self.client.currentUser.mobileServiceAuthenticationToken = FBToken;
-        return YES;
-    }else{
-        //Go back user
-        [RADUserDefaults alertWithTitle:@"Not logged" AndMessage:@"You must be logged to stay here"];
-        [self.navigationController popToRootViewControllerAnimated:YES];
-    }
-    return NO;
-}
+
 
 #pragma mark - Unused
 - (void)didReceiveMemoryWarning {
@@ -97,9 +77,33 @@
 -(void) syncViewWithModel{
     self.newsTitle.text=self.model.title;
     self.newsText.text=self.model.text;
-    self.newsAuthor.text=self.model.author.author_name;
-    self.latitudeLabel.text=[self.model.location.latitude stringValue];
-    self.longitudeLabel.text=[self.model.location.longitude stringValue];
+    self.newsAuthor.text=self.model.author;
+    self.latitudeLabel.text=[self.model.nLatitude stringValue];
+    self.longitudeLabel.text=[self.model.nLongitude stringValue];
+    
+    //Async download
+    
+    // Crear una cola
+    dispatch_queue_t asyncimage = dispatch_queue_create("asyncimage", 0);
+    
+    //Poner el prefijo
+    __block UIImage *image =nil;
+    __block NSData *imgData=nil;
+    
+    //Enviar un bloque a background
+    dispatch_async(asyncimage, ^{
+        NSURL *url = [NSURL URLWithString:self.model.imageURL];
+        
+        imgData = [NSData dataWithContentsOfURL:url];
+        
+        //Esto vuelve a primer plano y se ejecuta
+        dispatch_async(dispatch_get_main_queue(), ^{
+            image = [UIImage imageWithData:imgData];
+            self.newsImage.image=image;
+            
+        });
+    });
 }
+
 
 @end

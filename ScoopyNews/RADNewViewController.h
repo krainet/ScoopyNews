@@ -7,7 +7,7 @@
 //
 
 @import UIKit;
-@class RADNews;
+@class RNews;
 
 @interface RADNewViewController : UIViewController
 
@@ -20,6 +20,6 @@
 
 
 #pragma mark - Init
--(id) initWithModel:(RADNews*) model AndContext:(NSManagedObjectContext*) context;
+-(id) initWithModel:(RNews*) model AndContext:(NSManagedObjectContext*) context;
 
 @end
