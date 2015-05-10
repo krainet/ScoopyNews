@@ -15,6 +15,8 @@
 @property (weak, nonatomic) IBOutlet UITextView *newsText;
 @property (weak, nonatomic) IBOutlet UITextField *newsAuthor;
 @property (weak, nonatomic) IBOutlet UIImageView *newsImage;
+@property (weak, nonatomic) IBOutlet UILabel *latitudeLabel;
+@property (weak, nonatomic) IBOutlet UILabel *longitudeLabel;
 
 
 #pragma mark - Init

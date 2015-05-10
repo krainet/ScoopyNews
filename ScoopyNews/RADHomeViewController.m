@@ -11,6 +11,7 @@
 #import "RADHomeViewController.h"
 #import "AGTCoreDataStack.h"
 #import "RADNews.h"
+#import "RNews.h"
 #import "RADUserDefaults.h"
 #import "RADNewsTableViewController.h"
 #import "RADAuthorsTableViewController.h"
@@ -19,8 +20,12 @@
 
 #import <WindowsAzureMobileServices/WindowsAzureMobileServices.h>
 
+
+
 @interface RADHomeViewController ()
 @property (strong,nonatomic) AGTCoreDataStack *stack;
+@property (strong,nonatomic) AGTCoreDataStack *rstack;
+@property (strong,nonatomic) MSTable *table;
 @end
 
 @implementation RADHomeViewController
@@ -29,11 +34,46 @@
     [super viewDidLoad];
     self.title=@"Scoopy News Menú";
     
+    self.titleLabel.text=@"Loading news...";
+    [self.readButton setTitle:@"Downloading..."];
+    [self.readButton setEnabled:NO];
+    
     //AzureClient
     self.client = [MSClient clientWithApplicationURLString:AZURE_ENDPOINT applicationKey:AZURE_KEY];
+    self.table=[self.client tableWithName:AZURE_TABLE];
     
     //Init coredata Stack
     self.stack = [AGTCoreDataStack coreDataStackWithModelName:@"Model"];
+    self.rstack = [AGTCoreDataStack coreDataStackWithModelName:@"RemoteModel"];
+    
+    NSPredicate *azure_predicate = [NSPredicate predicateWithFormat:@"published == %@", @"1"];
+    //NSPredicate *predicateName = [NSPredicate predicateWithFormat:@"name contains[cd] %@", query];
+    //NSPredicate *predicateSSID = [NSPredicate predicateWithFormat:@"socialSecurity contains[cd] %@", query];
+    //NSArray *subPredicates = [NSArray arrayWithObjects:predicateName, predicateSSID, nil];
+    
+    //NSPredicate *orPredicate = [NSCompoundPredicate orPredicateWithSubpredicates:subPredicates];
+    
+    
+    [self.table readWithPredicate:azure_predicate
+                       completion:^(NSArray *items, NSInteger totalCount, NSError *error) {
+                           if(error){
+                               
+                           }else{
+                               for (NSDictionary *dict in items) {
+                                   [RNews rnewsWithDictionary:dict InContext:self.rstack.context];
+                               }
+                               self.activity.hidden=YES;
+                               [self.activity stopAnimating];
+                               self.titleLabel.text=@"Scoopy News!";
+                               [self.readButton setTitle:@"Read Now!"];
+                               [self.readButton setEnabled:YES];
+                           }
+                       }];
+
+    
+    
+    
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -43,6 +83,7 @@
 
 #pragma mark Actions
 - (IBAction)readNewsAction:(id)sender {
+    
     RADNewsTableViewController *nVC = [[RADNewsTableViewController alloc]
                                        initWithFetchedResultsController:[self getData] style:UITableViewStylePlain];
     [self.navigationController pushViewController:nVC animated:YES];
@@ -58,9 +99,6 @@
         //No logado
         [self facebookLoginWithController:self];
     }
-    [self.stack saveWithErrorBlock:^(NSError *error) {
-        NSLog(@"Saving...");
-    }];
 }
 
 - (IBAction)testAction:(id)sender {
@@ -71,34 +109,40 @@
 
 #pragma mark - CoreData
 -(NSFetchedResultsController*) getData{
-    // Un fetchRequest
-    NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:[RADNews entityName]];
-//    req.sortDescriptors = @[[NSSortDescriptor
-//                             sortDescriptorWithKey:RADNewsAttributes.datePublish
-//                             ascending:NO
-//                             selector:@selector(caseInsensitiveCompare:)]];
-    req.fetchBatchSize = 20;
-
-    req.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:RADNewsAttributes.datePublish ascending:NO]];
     
+    
+    //NSPredicate *predicate = [NSPredicate predicateWithFormat:@"published == %@", @1];
+    // Un fetchRequest
+    NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:[RNews entityName]];
+    //req.predicate=predicate;
+    req.fetchBatchSize = 20;
+    req.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:RNewsAttributes.datePublish ascending:NO]];
     // FetchedResultsController
     NSFetchedResultsController *fc = [[NSFetchedResultsController alloc]
                                       initWithFetchRequest:req
-                                      managedObjectContext:self.stack.context
+                                      managedObjectContext:self.rstack.context
                                       sectionNameKeyPath:nil
                                       cacheName:nil];
+    NSArray *results = [self.rstack
+                        executeFetchRequest:req
+                        errorBlock:^(NSError *error) {
+                            NSLog(@"error al buscar! %@", error);
+                        }];
+    NSLog(@"Results %@",results);
     
+    NSLog(@"Total News: %lu", (unsigned long)results.count);
+    for (RNews *n in results) {
+        NSLog(@"N Tittle: %@",n.title);
+    }
+
     return fc;
     
 }
 
+
 -(NSFetchedResultsController*) getDataForAuthor{
     // Un fetchRequest
     NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:[RADNews entityName]];
-//    req.sortDescriptors = @[[NSSortDescriptor
-//                             sortDescriptorWithKey:RADNewsAttributes.dateAdd
-//                             ascending:NO
-//                             selector:@selector(caseInsensitiveCompare:)]];
     
     req.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:RADNewsAttributes.dateAdd ascending:NO]];
     req.fetchBatchSize = 20;

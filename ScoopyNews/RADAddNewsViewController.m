@@ -37,7 +37,7 @@
     if(self=[super init]){
         _model=model;
         _client=[MSClient clientWithApplicationURLString:AZURE_ENDPOINT applicationKey:AZURE_KEY];
-        _table=[_client tableWithName:@"scoopyNews"];
+        _table=[_client tableWithName:AZURE_TABLE];
     }
     return self;
 }
@@ -45,6 +45,8 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self syncViewWithModel];
+    
+
 }
 
 #pragma mark - Unused
@@ -59,22 +61,26 @@
 
     //Cloud save
     NSString *userId = [RADUserDefaults getValueForKey:LOCAL_FACEBOOK_USERID];
-    NSDictionary *dict = @{@"authorId":userId,@"nowsTitle":self.newsTitle.text,@"newsText":self.newsText.text,@"pictureUrl":@""};
-    [self.table insert:dict completion:^(NSDictionary *item, NSError *error) {
+    
+    
+    NSMutableDictionary *dict = [NSMutableDictionary
+                                 dictionaryWithDictionary:@{@"authorId":userId,
+                                                            @"newsTitle":self.newsTitle.text,
+                                                            @"newsText":self.newsText.text,
+                                                            @"pictureUrl":@""
+                                                            }];
+    
+    [dict setObject:self.model.idCloud forKey:@"id"];
+    [self.table update:dict completion:^(NSDictionary *item, NSError *error) {
         if(error){
-            NSLog(@"Error saving in azure:: %@",error);
+            NSLog(@"Error updating %@",error);
         }else{
-            //NSLog(@"Saved item! : %@",item);
-            [RADUserDefaults alertWithTitle:@"Azure Saved" AndMessage:@"Data saved on Azure"];
-            //Guardo cambios antes de irme a la foto
+            NSLog(@"Updated before takePicture");
             self.model.title=self.newsTitle.text;
             self.model.text=self.newsText.text;
-            self.model.idCloud=[item objectForKey:@"id"];
-            
-            
             //Vamos a tomar foto o a ver la actual
             RADImageViewController *iVC = [[RADImageViewController alloc]initWithModel:self.model AndContext:self.context];
-            [self.navigationController pushViewController:iVC animated:YES];            
+            [self.navigationController pushViewController:iVC animated:YES];
         }
     }];
 }
@@ -88,7 +94,36 @@
 -(IBAction)saveNews:(id)sender{
     self.model.title=self.newsTitle.text;
     self.model.text=self.newsText.text;
+    
+    //Cloud save
+    NSString *userId = [RADUserDefaults getValueForKey:LOCAL_FACEBOOK_USERID];
+    
+    NSMutableDictionary *dict = [NSMutableDictionary
+                                 dictionaryWithDictionary:@{@"authorId":userId,
+                                                            @"newsTitle":self.newsTitle.text,
+                                                            @"newsText":self.newsText.text
+                                                            }];
+    
+    [dict setObject:self.model.idCloud forKey:@"id"];
+    [self.table update:dict completion:^(NSDictionary *item, NSError *error) {
+        if(error){
+            NSLog(@"Error updating");
+            //Vamos a tomar foto o a ver la actual
+            [self.navigationController popViewControllerAnimated:YES];
+        }else{
+            NSLog(@"Updated all in Azure from Button");
+            //Vamos a tomar foto o a ver la actual
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+    }];
+    
 }
+
+- (IBAction)hideKeyboard:(id)sender {
+    [self.view endEditing:YES];
+
+}
+
 
 #pragma mark - Utils
 -(void)syncViewWithModel{

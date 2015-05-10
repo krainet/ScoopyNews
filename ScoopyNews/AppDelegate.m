@@ -31,6 +31,10 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     self.stack = [AGTCoreDataStack coreDataStackWithModelName:@"Model"];
+    self.rstack = [AGTCoreDataStack coreDataStackWithModelName:@"RemoteModel"];
+    
+    //Clear remote data
+    [self.rstack zapAllData];
     
     //[self createDummyData];
     //[self.stack zapAllData];

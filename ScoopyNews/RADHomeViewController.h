@@ -19,6 +19,10 @@
 - (IBAction)publishNewsAction:(id)sender;
 - (IBAction)testAction:(id)sender;
 
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *readButton;
+
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activity;
 
 
 @end

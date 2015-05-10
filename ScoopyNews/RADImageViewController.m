@@ -9,6 +9,7 @@
 #import "RADImageViewController.h"
 #import "RADNews.h"
 #import "RADImages.h"
+#import "RADUserDefaults.h"
 
 #import "Config.h"
 
@@ -19,6 +20,7 @@
 @property (strong,nonatomic) RADNews *model;
 @property (strong,nonatomic) RADImages *modelImage;
 @property (strong,nonatomic) MSClient *client;
+@property (strong,nonatomic) MSTable *table;
 @property (strong,nonatomic) NSManagedObjectContext *context;
 @end
 
@@ -29,6 +31,7 @@
     if(self=[super initWithNibName:nil bundle:nil]){
         _model=model;
         _client=[MSClient clientWithApplicationURLString:AZURE_ENDPOINT applicationKey:AZURE_KEY];
+        _table=[_client tableWithName:AZURE_TABLE];
         _context=context;
     }
     return self;
@@ -38,6 +41,23 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    
+    //No hay cojones de salvar esto automáticamente con nested blocks.
+    if(self.model.image.imageUrl){
+        NSDictionary *dict = @{@"id":self.model.idCloud,@"pictureUrl":self.model.image.imageUrl};
+        MSTable *table = [self.client tableWithName:AZURE_TABLE];
+        [table update:dict completion:^(NSDictionary *item, NSError *error) {
+            if(!error){
+                //NSLog(@"Saving picture in willDisapear");
+            }else{
+                NSLog(@"Err saving on Azure");
+            }
+        }];
+    }
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -79,15 +99,25 @@
     
 }
 
-- (IBAction)saveNews:(id)sender {
-}
-
 - (IBAction)deletePicture:(id)sender {
+    UIImage *img= [UIImage imageNamed:@"noimage.jpg"];
+    self.model.image.image=img;
+    self.model.image.imageUrl=@"";
+    [self syncViewWithModel];
 }
 
 #pragma mark - Utils
 -(void) syncViewWithModel{
     self.newsImage.image=self.model.image.image;
+}
+
+-(void) saveContext{
+    
+    NSError *err;
+    [self.model.managedObjectContext save:&err];
+    if(!err){
+        NSLog(@"Updated local context");
+    }
 }
 
 
@@ -112,41 +142,28 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info{
     
     NSString *md5name = [self md5:timestamp];
     md5name=[md5name stringByAppendingString:@".jpg"];
-    NSLog(@"Nombre :: %@",md5name);
+    NSLog(@"PictureName :: %@",md5name);
 
     [self.client invokeAPI:@"getuploadsasurl" body:nil HTTPMethod:@"GET"
                 parameters:@{@"blobName":md5name}
                    headers:nil
                 completion:^(id result, NSHTTPURLResponse *response, NSError *error) {
-                    if (!error) {
+                    if(error){
+                        NSLog(@"Error subiendo %@",error);
+                    }else{
                         NSString *sasUrls= [result valueForKey:@"sasUrl"];
                         NSURL *passUrl = [NSURL URLWithString:sasUrls];
-                        [self handleImageToUploadAzureBlob:passUrl blobImg:img completionUploadTask:^(id result, NSError *error) {
-                            NSLog(@"Entramos en completion....");
+                        [self handleImageToUploadAzureBlob:passUrl blobImg:img blobName: md5name completionUploadTask:^(id result, NSError *error) {
                             if(error){
                                 NSLog(@"Error handling upload.... %@",error);
                             }else{
                                 NSLog(@"Upload successfull ... ");
-                                self.model.image.imageUrl=md5name;
                             }
                         }];
-                    }else{
-                        NSLog(@"Error subiendo %@",error);
-                        
                     }
     }];
     
-    self.model.image.imageUrl=@"https://scoopynews.blob.core.windows.net/scoopycontainer/";
-    self.model.image.imageUrl=[self.model.image.imageUrl stringByAppendingString:md5name];
     
-    //save context
-    NSError *error;
-    [self.context save:&error];
-    if(error){
-        NSLog(@"Error");
-    }else{
-        NSLog(@"Sin error");
-    }
     
     // Quito de encima el controlador que estamos presentando
     [self dismissViewControllerAnimated:YES
@@ -157,7 +174,10 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info{
 
 
 
-- (void)handleImageToUploadAzureBlob:(NSURL *)theURL blobImg:(UIImage*)blobImg completionUploadTask:(void (^)(id result, NSError * error))completion{
+- (void)handleImageToUploadAzureBlob:(NSURL *)theURL
+                             blobImg:(UIImage*)blobImg
+                            blobName:(NSString*)blobName
+                completionUploadTask:(void (^)(id result, NSError * error))completion{
     
     NSMutableURLRequest * request = [NSMutableURLRequest requestWithURL:theURL];
     
@@ -170,10 +190,25 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info{
         
         if (!error) {
             //NSLog(@"resultado --> %@", response);
-            NSLog(@"UploadSuccessfull");
+            NSLog(@"Img uploaded to Azure");
+            self.model.image.imageUrl=blobName;
+            self.model.image.imageUrl=@"https://scoopynews.blob.core.windows.net/scoopycontainer/";
+            self.model.image.imageUrl=[self.model.image.imageUrl stringByAppendingString:blobName];
+            
+            //Local context
+            [self saveContext];
+            NSDictionary *dict = @{@"id":self.model.idCloud,@"pictureUrl":self.model.image.imageUrl};
+            MSTable *table = [self.client tableWithName:AZURE_TABLE];
+            [table update:dict completion:^(NSDictionary *item, NSError *error) {
+                if(error){
+                    NSLog(@"Error");
+                }else{
+                    NSLog(@"No err");
+                }
+            }];
         }
-        
     }];
+    
     [uploadTask resume];
 }
 

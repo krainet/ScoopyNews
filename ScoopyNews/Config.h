@@ -14,6 +14,7 @@
 #define AZURE_KEY @"gtVskTsUIgywXHqmolwyPCezDOImEi86"
 
 #define AZURE_TEST_TABLE @"scoopyTestTable"
+#define AZURE_TABLE @"scoopyNews"
 #define AZURE_TEST_API @"sayhelloworld"
 
 #define LOCAL_FACEBOOK_TOKEN @"facebookToken"

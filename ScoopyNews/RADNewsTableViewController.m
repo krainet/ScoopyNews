@@ -7,12 +7,12 @@
 //
 
 #import "RADNewsTableViewController.h"
-#import "RADNews.h"
+#import "RNews.h"
 #import "RADImages.h"
 #import "RADNewViewController.h"
 
 @interface RADNewsTableViewController ()
-@property (nonatomic, strong) RADNews  *model;
+@property (nonatomic, strong) RNews  *model;
 @end
 
 @implementation RADNewsTableViewController
@@ -23,17 +23,13 @@
 }
 
 
-
-
-
-
 // el método que genera la celda
 -(UITableViewCell *) tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     
     // Averiguar la nota
-    RADNews *n = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    RNews *n = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
     
     // Crear la celda
@@ -46,11 +42,8 @@
     }
     // Sincornizar nota -> celda
     cell.textLabel.text = n.title;
-    cell.imageView.image=[n.image image];
-    NSString *dateString = [NSDateFormatter localizedStringFromDate:n.datePublish
-                                                          dateStyle:NSDateFormatterShortStyle
-                                                          timeStyle:NSDateFormatterFullStyle];
-    cell.detailTextLabel.text = dateString;
+    cell.imageView.image=[UIImage imageNamed:@"noimage.jpg"];
+    cell.detailTextLabel.text = n.author;
     
     // devolverla
     return cell;

@@ -12,10 +12,16 @@
 #import "RADImages.h"
 #import "RADAddNewsViewController.h"
 #import "RADAuthors.h"
+#import "RADUserDefaults.h"
+#import "RADLocation.h"
 #import "Config.h"
+
+#import <WindowsAzureMobileServices/WindowsAzureMobileServices.h>
 
 @interface RADAuthorsTableViewController ()
 @property (strong,nonatomic) RADNews *news;
+@property (strong,nonatomic) MSClient *client;
+@property (strong,nonatomic) MSTable *table;
 @end
 
 @implementation RADAuthorsTableViewController
@@ -26,6 +32,9 @@
     [self addNewsButton];
     // Edit button
     //self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    _client = [MSClient clientWithApplicationURL:[NSURL URLWithString:AZURE_ENDPOINT] applicationKey:AZURE_KEY];
+    _table = [_client tableWithName:AZURE_TABLE];
 }
 
 // el método que genera la celda
@@ -88,20 +97,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
 
 -(void) addNewNews:(id) sender{
     RADAuthors *author = [RADAuthors authorWithName:@"Ramon Alberti" InContext:self.fetchedResultsController.managedObjectContext];
-    [RADNews newsWithTitle:@"Nueva noticia" Text:@"" Author:author InContext:self.fetchedResultsController.managedObjectContext];
-//    NSNotification *notification =
-//    [NSNotification notificationWithName: MODEL_HAS_CHANGES
-//                                  object:self
-//                                userInfo:@{@"context" : self.fetchedResultsController.managedObjectContext}];
-//    
-//    [[NSNotificationCenter defaultCenter] postNotification:notification];
-    NSError *err;
-    [self.fetchedResultsController.managedObjectContext save:&err];
-    if(err){
-        NSLog(@"Error saving... %@",err);
-    }else{
-        NSLog(@"Saved OK");
-    }
+    RADNews *n =[RADNews newsWithTitle:@"Nueva noticia"
+                                  Text:@"Texto noticia"
+                                Author:author
+                             InContext:self.fetchedResultsController.managedObjectContext];
+    
+        
 }
 
 

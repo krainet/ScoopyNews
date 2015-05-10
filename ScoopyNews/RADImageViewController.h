@@ -17,7 +17,6 @@ typedef void (^CompletionWithSasBlock) (NSString *sasUrl);
 
 
 - (IBAction)takePicture:(id)sender;
-- (IBAction)saveNews:(id)sender;
 - (IBAction)deletePicture:(id)sender;
 
 

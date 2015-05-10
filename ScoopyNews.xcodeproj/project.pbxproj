@@ -11,6 +11,9 @@
 		1E01CB971AEEB50900CF0D1E /* RADCoreDataUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E01CB961AEEB50900CF0D1E /* RADCoreDataUtils.m */; };
 		1E01CB9A1AEEB53200CF0D1E /* RADScoopyNewsBaseClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E01CB991AEEB53200CF0D1E /* RADScoopyNewsBaseClass.m */; };
 		1E488E011AF2A175006A2F41 /* noimage.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1E488E001AF2A175006A2F41 /* noimage.jpg */; };
+		1E8559031AFFAE9200C88443 /* RemoteModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1E8559011AFFAE9200C88443 /* RemoteModel.xcdatamodeld */; };
+		1E8559061AFFAF8800C88443 /* _RNews.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8559051AFFAF8800C88443 /* _RNews.m */; };
+		1E8559091AFFAFA800C88443 /* RNews.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8559081AFFAFA800C88443 /* RNews.m */; };
 		1E99D8F61AF14FED00747CEB /* RADAzureUsers.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E99D8F51AF14FED00747CEB /* RADAzureUsers.m */; };
 		1E99D8F91AF15BEA00747CEB /* RADUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E99D8F81AF15BEA00747CEB /* RADUserDefaults.m */; };
 		1EAEE93C1AEFF84A0053323D /* WindowsAzureMobileServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EAEE93B1AEFF84A0053323D /* WindowsAzureMobileServices.framework */; };
@@ -66,6 +69,11 @@
 		1E01CB981AEEB53200CF0D1E /* RADScoopyNewsBaseClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RADScoopyNewsBaseClass.h; sourceTree = "<group>"; };
 		1E01CB991AEEB53200CF0D1E /* RADScoopyNewsBaseClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RADScoopyNewsBaseClass.m; sourceTree = "<group>"; };
 		1E488E001AF2A175006A2F41 /* noimage.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = noimage.jpg; sourceTree = "<group>"; };
+		1E8559021AFFAE9200C88443 /* RemoteModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = RemoteModel.xcdatamodel; sourceTree = "<group>"; };
+		1E8559041AFFAF8800C88443 /* _RNews.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _RNews.h; sourceTree = "<group>"; };
+		1E8559051AFFAF8800C88443 /* _RNews.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _RNews.m; sourceTree = "<group>"; };
+		1E8559071AFFAFA800C88443 /* RNews.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNews.h; sourceTree = "<group>"; };
+		1E8559081AFFAFA800C88443 /* RNews.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNews.m; sourceTree = "<group>"; };
 		1E99D8F41AF14FED00747CEB /* RADAzureUsers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RADAzureUsers.h; sourceTree = "<group>"; };
 		1E99D8F51AF14FED00747CEB /* RADAzureUsers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RADAzureUsers.m; sourceTree = "<group>"; };
 		1E99D8F71AF15BEA00747CEB /* RADUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RADUserDefaults.h; sourceTree = "<group>"; };
@@ -166,6 +174,8 @@
 		1EBA5A971AF26D3200E96EEE /* Machine */ = {
 			isa = PBXGroup;
 			children = (
+				1E8559041AFFAF8800C88443 /* _RNews.h */,
+				1E8559051AFFAF8800C88443 /* _RNews.m */,
 				1EF75AA41AFA5FDD00E05A1D /* _RADLocation.h */,
 				1EF75AA51AFA5FDD00E05A1D /* _RADLocation.m */,
 				1EBA5A981AF26D5000E96EEE /* _RADAuthors.h */,
@@ -280,6 +290,8 @@
 		1EFE3E861AEEA4200091CA0E /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				1E8559071AFFAFA800C88443 /* RNews.h */,
+				1E8559081AFFAFA800C88443 /* RNews.m */,
 				1EF75AA71AFA5FEA00E05A1D /* RADLocation.h */,
 				1EF75AA81AFA5FEA00E05A1D /* RADLocation.m */,
 				1EBA5AAA1AF26DA200E96EEE /* RADNews.h */,
@@ -293,6 +305,7 @@
 				1EBA5A971AF26D3200E96EEE /* Machine */,
 				1EFE3E881AEEA4600091CA0E /* CoreData */,
 				1E01CB921AEEB0E200CF0D1E /* Model.xcdatamodeld */,
+				1E8559011AFFAE9200C88443 /* RemoteModel.xcdatamodeld */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -496,14 +509,17 @@
 				1E99D8F91AF15BEA00747CEB /* RADUserDefaults.m in Sources */,
 				1EBA5AA61AF26D7C00E96EEE /* RADAuthors.m in Sources */,
 				1E99D8F61AF14FED00747CEB /* RADAzureUsers.m in Sources */,
+				1E8559031AFFAE9200C88443 /* RemoteModel.xcdatamodeld in Sources */,
 				1EAEE93F1AF000D00053323D /* RADAzureTable.m in Sources */,
 				1EFE3E5B1AEEA3690091CA0E /* main.m in Sources */,
 				1EBA5AA31AF26D5000E96EEE /* _RADValoration.m in Sources */,
 				1EBA5AA21AF26D5000E96EEE /* _RADNews.m in Sources */,
 				1E01CB941AEEB0E200CF0D1E /* Model.xcdatamodeld in Sources */,
 				1EFE3E8B1AEEA47A0091CA0E /* AGTCoreDataStack.m in Sources */,
+				1E8559061AFFAF8800C88443 /* _RNews.m in Sources */,
 				1EBA5AAE1AF26DA200E96EEE /* RADNews.m in Sources */,
 				1EBA5AAF1AF26DA200E96EEE /* RADValoration.m in Sources */,
+				1E8559091AFFAFA800C88443 /* RNews.m in Sources */,
 				1EBA5AB31AF281C400E96EEE /* RADHomeViewController.m in Sources */,
 				1E01CB971AEEB50900CF0D1E /* RADCoreDataUtils.m in Sources */,
 			);
@@ -731,6 +747,16 @@
 			);
 			currentVersion = 1E01CB931AEEB0E200CF0D1E /* Model.xcdatamodel */;
 			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+		1E8559011AFFAE9200C88443 /* RemoteModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				1E8559021AFFAE9200C88443 /* RemoteModel.xcdatamodel */,
+			);
+			currentVersion = 1E8559021AFFAE9200C88443 /* RemoteModel.xcdatamodel */;
+			path = RemoteModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

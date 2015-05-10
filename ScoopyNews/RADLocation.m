@@ -17,7 +17,6 @@
     
     location.latitudeValue=loc.coordinate.latitude;
     location.longitudeValue=loc.coordinate.longitude;
-    
     return location;
 }
 

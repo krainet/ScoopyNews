@@ -29,12 +29,6 @@
                             </connections>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="YUG-gc-2lZ"/>
-                        <barButtonItem systemItem="save" id="08c-cN-1bc">
-                            <connections>
-                                <action selector="saveNews:" destination="-1" id="tf5-D6-wil"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="464-3f-NXo"/>
                         <barButtonItem systemItem="trash" id="NWD-W4-JxB">
                             <connections>
                                 <action selector="deletePicture:" destination="-1" id="Ir4-Rm-XGy"/>

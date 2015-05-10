@@ -7,6 +7,17 @@
 @end
 
 @implementation RADAuthors
+@synthesize model=_model;
+
+
+#pragma mark -  Factory Inits
++(NSArray *) observableKeys{
+    return @[RADAuthorsAttributes.author_name,RADAuthorsAttributes.author_email,RADAuthorsRelationships.news];
+}
+
++(RADAuthors*) authorWithModel:(RADAuthors *) model{
+    return model;
+}
 
 +(instancetype) authorWithName:(NSString *) name
                      InContext:(NSManagedObjectContext*) context{
@@ -19,6 +30,26 @@
     return author;
 }
 
+
+-(NSString*) authorName{
+    // Convertir la NSData en UIImage
+    return self.author_name;
+}
+
+-(void) setAuthorName:(NSString*) author{
+    // Convertir la NSData en UIImage
+    self.author_name=author;
+}
+
+
+
+#pragma mark - KVO
+-(void) observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context{
+    
+}
 
 
 @end
